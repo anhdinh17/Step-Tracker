@@ -98,6 +98,7 @@ struct ContentView: View {
                 Text(metric.title)
             }
         }
+        // We will have tint color even we navigate to other view
         .tint(isSteps ? .pink : .indigo)
     }
 }
