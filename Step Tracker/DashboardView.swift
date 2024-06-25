@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  DashboardView.swift
 //  Step Tracker
 //
 //  Created by Anh Dinh on 6/24/24.
@@ -25,7 +25,7 @@ enum HealthMetricContext: CaseIterable, Identifiable {
     }
 }
 
-struct ContentView: View {
+struct DashboardView: View {
     @State var selectedStat: HealthMetricContext = .steps
     var isSteps: Bool { selectedStat == .steps }
     
@@ -44,6 +44,7 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                     
                     VStack(alignment: .leading) {
+                        // NavigationLink takes in a value of enum
                         NavigationLink(value: selectedStat) {
                             HStack {
                                 VStack {
@@ -95,7 +96,8 @@ struct ContentView: View {
             .padding()
             .navigationTitle("Dashboard")
             .navigationDestination(for: HealthMetricContext.self) { metric in
-                Text(metric.title)
+                // metric is an enum
+                HealthDataListView(metric: metric)
             }
         }
         // We will have tint color even we navigate to other view
@@ -104,5 +106,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    DashboardView()
 }
