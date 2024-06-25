@@ -7,28 +7,63 @@
 
 import SwiftUI
 
+enum HealthMetricContext: CaseIterable, Identifiable {
+    // For usage of ForEach in Picker
+    var id: Self {
+        return self
+    }
+    
+    case steps, weight
+    
+    var title: String {
+        switch self {
+        case .steps:
+            return "Steps"
+        case .weight:
+            return "Weight"
+        }
+    }
+}
+
 struct ContentView: View {
+    @State var selectedStat: HealthMetricContext = .steps
+    var isSteps: Bool { selectedStat == .steps }
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            VStack {
-                                Label("Steps", systemImage: "figure.walk")
-                                    .font(.title3.bold())
-                                    .foregroundStyle(.pink)
-                                
-                                Text("Avg: 10k steps")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
+                    // Segmented Controll
+                    // When tapping on 1 segment, "selectedStat" will have new enum value
+                    Picker("Selected Stat", selection: $selectedStat) {
+                        // Loop through all cases of enum
+                        ForEach(HealthMetricContext.allCases) { metric in
+                            Text(metric.title)
                         }
-                        .padding(.bottom, 10)
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    VStack(alignment: .leading) {
+                        NavigationLink(value: selectedStat) {
+                            HStack {
+                                VStack {
+                                    Label("Steps", systemImage: "figure.walk")
+                                        .font(.title3.bold())
+                                        .foregroundStyle(.pink)
+                                    
+                                    Text("Avg: 10k steps")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                            }
+                            .padding(.bottom, 10)
+
+                        }
+                        .foregroundStyle(.secondary)
                         
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(.secondary)
@@ -59,7 +94,11 @@ struct ContentView: View {
             }
             .padding()
             .navigationTitle("Dashboard")
+            .navigationDestination(for: HealthMetricContext.self) { metric in
+                Text(metric.title)
+            }
         }
+        .tint(isSteps ? .pink : .indigo)
     }
 }
 
