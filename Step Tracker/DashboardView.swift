@@ -26,8 +26,10 @@ enum HealthMetricContext: CaseIterable, Identifiable {
 }
 
 struct DashboardView: View {
-    // User default for the first time launch this screen
+    // We use @AppStorage for UserDefault for the first time launching this screen.
     @AppStorage("hasSeenPermissionPriming") private var hasSeenPermissionPriming = false
+    
+    @Environment(HealthkitManager.self) private var hkManager
     
     @State private var isShowingPermissionPrimingSheet = false
     @State var selectedStat: HealthMetricContext = .steps
@@ -97,7 +99,7 @@ struct DashboardView: View {
                 }
             }
             .padding()
-            .onAppear {
+            .task {
                 isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
             }
             .navigationTitle("Dashboard")
