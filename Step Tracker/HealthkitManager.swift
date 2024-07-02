@@ -17,6 +17,41 @@ import Observation // For new @ObservableObject as of the time of this app
     // Type of data we're gonna read from and write to Health App.
     let types: Set = [HKQuantityType(.stepCount), HKQuantityType(.bodyMass)]
     
+    /// fetch data of steps count from Health App
+    func fetchStepCount() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let endDate = calendar.date(byAdding: .day, value: 1, to: today)!
+        let startDate = calendar.date(byAdding: .day, value: -28, to: endDate)
+        
+        let queryPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+        let samplePredicate = HKSamplePredicate.quantitySample(type: HKQuantityType(.stepCount),
+                                                               predicate: queryPredicate)
+        let stepsQuery = HKStatisticsCollectionQueryDescriptor(predicate: samplePredicate,
+                                                               options: .cumulativeSum,
+                                                               anchorDate: endDate,
+                                                               intervalComponents: .init(day: 1))
+        
+        let stepCounts = try! await stepsQuery.result(for: store)
+    }
+    
+    func fetchWeights() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let endDate = calendar.date(byAdding: .day, value: 1, to: today)!
+        let startDate = calendar.date(byAdding: .day, value: -28, to: endDate)
+        
+        let queryPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+        let samplePredicate = HKSamplePredicate.quantitySample(type: HKQuantityType(.bodyMass),
+                                                               predicate: queryPredicate)
+        let stepsQuery = HKStatisticsCollectionQueryDescriptor(predicate: samplePredicate,
+                                                               options: .mostRecent,
+                                                               anchorDate: endDate,
+                                                               intervalComponents: .init(day: 1))
+        
+        let weights = try! await stepsQuery.result(for: store)
+    }
+    
     /// This func creates mock data to Health App. We only use this func once.
     /// We send data of steps and weight for the last 28 days to Health App.
     /// weightQuantity is in the form of downtrend
