@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 enum HealthMetricContext: CaseIterable, Identifiable {
     // For usage of ForEach in Picker
@@ -71,9 +72,15 @@ struct DashboardView: View {
                         }
                         .foregroundStyle(.secondary)
                         
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.secondary)
-                            .frame(height: 150)
+                        Chart {
+                            ForEach (hkManager.stepData) { step in
+                                BarMark(
+                                    x: .value("Date", step.date, unit: .day),
+                                    y: .value("Steps", step.value)
+                                )
+                            }
+                        }
+                        .frame(height: 150)
                     }
                     .padding()
                     .background (RoundedRectangle(cornerRadius: 10).fill(Color(.secondarySystemBackground)))
@@ -101,6 +108,8 @@ struct DashboardView: View {
             .padding()
             .task {
                 isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
+                await hkManager.fetchWeights()
+                await hkManager.fetchStepCount()
             }
             .navigationTitle("Dashboard")
             .navigationDestination(for: HealthMetricContext.self) { metric in

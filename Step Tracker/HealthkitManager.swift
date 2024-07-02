@@ -17,6 +17,9 @@ import Observation // For new @ObservableObject as of the time of this app
     // Type of data we're gonna read from and write to Health App.
     let types: Set = [HKQuantityType(.stepCount), HKQuantityType(.bodyMass)]
     
+    var stepData: [HealthMetric] = []
+    var weightData: [HealthMetric] = []
+    
     /// fetch data of steps count from Health App
     func fetchStepCount() async {
         let calendar = Calendar.current
@@ -33,6 +36,11 @@ import Observation // For new @ObservableObject as of the time of this app
                                                                intervalComponents: .init(day: 1))
         
         let stepCounts = try! await stepsQuery.result(for: store)
+        
+        // Create data for stepData
+        stepData = stepCounts.statistics().map {
+            .init(date: $0.startDate, value: $0.sumQuantity()?.doubleValue(for: .count()) ?? 0)
+        }
     }
     
     func fetchWeights() async {
@@ -50,6 +58,9 @@ import Observation // For new @ObservableObject as of the time of this app
                                                                intervalComponents: .init(day: 1))
         
         let weights = try! await stepsQuery.result(for: store)
+        weightData = weights.statistics().map {
+            .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0)
+        }
     }
     
     /// This func creates mock data to Health App. We only use this func once.
