@@ -34,15 +34,19 @@ import Observation // For new @ObservableObject as of the time of this app
                                                                options: .cumulativeSum,
                                                                anchorDate: endDate,
                                                                intervalComponents: .init(day: 1))
-        
-        let stepCounts = try! await stepsQuery.result(for: store)
-        
-        // Create data for stepData
-        stepData = stepCounts.statistics().map {
-            .init(date: $0.startDate, value: $0.sumQuantity()?.doubleValue(for: .count()) ?? 0)
+        do {
+            let stepCounts = try await stepsQuery.result(for: store)
+            
+            // Create data for stepData
+            stepData = stepCounts.statistics().map {
+                .init(date: $0.startDate, value: $0.sumQuantity()?.doubleValue(for: .count()) ?? 0)
+            }
+        } catch {
+            
         }
     }
     
+    /// fetch body weight from Health App
     func fetchWeights() async {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
@@ -56,10 +60,13 @@ import Observation // For new @ObservableObject as of the time of this app
                                                                options: .mostRecent,
                                                                anchorDate: endDate,
                                                                intervalComponents: .init(day: 1))
-        
-        let weights = try! await stepsQuery.result(for: store)
-        weightData = weights.statistics().map {
-            .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0)
+        do {
+            let weights = try await stepsQuery.result(for: store)
+            weightData = weights.statistics().map {
+                .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0)
+            }
+        } catch {
+            
         }
     }
     

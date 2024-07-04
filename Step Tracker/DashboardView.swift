@@ -35,6 +35,11 @@ struct DashboardView: View {
     @State private var isShowingPermissionPrimingSheet = false
     @State var selectedStat: HealthMetricContext = .steps
     var isSteps: Bool { selectedStat == .steps }
+    var avgStepCount: Double {
+        guard !hkManager.stepData.isEmpty else {return 0}
+        let totalSteps = hkManager.stepData.reduce(0) {$0 + $1.value}
+        return totalSteps/Double(hkManager.stepData.count)
+    }
     
     var body: some View {
         NavigationStack {
@@ -53,13 +58,14 @@ struct DashboardView: View {
                     VStack(alignment: .leading) {
                         // NavigationLink takes in a value of enum
                         NavigationLink(value: selectedStat) {
+                            // Whole HStack is Navigation Link
                             HStack {
                                 VStack {
                                     Label("Steps", systemImage: "figure.walk")
                                         .font(.title3.bold())
                                         .foregroundStyle(.pink)
                                     
-                                    Text("Avg: 10k steps")
+                                    Text("Avg: \(avgStepCount) steps")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -73,14 +79,37 @@ struct DashboardView: View {
                         .foregroundStyle(.secondary)
                         
                         Chart {
-                            ForEach (hkManager.stepData) { step in
+                            // Average line
+                            RuleMark(y: .value("Average", avgStepCount))
+                                .foregroundStyle(Color.secondary)
+                                .lineStyle(.init(lineWidth: 1, dash: [5]))
+                            
+                            ForEach (HealthMetric.mockData) { step in
                                 BarMark(
                                     x: .value("Date", step.date, unit: .day),
                                     y: .value("Steps", step.value)
                                 )
+                                .foregroundStyle(Color.pink.gradient)
                             }
                         }
                         .frame(height: 150)
+                        // Customize X axis
+                        .chartXAxis {
+                            // Custom format of date
+                            AxisMarks {
+                                AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
+                            }
+                        }
+                        .chartYAxis{
+                            AxisMarks { value in
+                                // Add grid line to chart
+                                AxisGridLine()
+                                    .foregroundStyle(Color.secondary.opacity(0.3))
+                                
+                                // Custsom format of number of steps on Y-axis
+                                AxisValueLabel((value.as(Double.self) ?? 0).formatted(.number.notation(.compactName)))
+                            }
+                        }
                     }
                     .padding()
                     .background (RoundedRectangle(cornerRadius: 10).fill(Color(.secondarySystemBackground)))

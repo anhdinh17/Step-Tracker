@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct Step_TrackerApp: App {
+    // Inject environment object here
     let hkManager = HealthkitManager()
     
     var body: some Scene {
