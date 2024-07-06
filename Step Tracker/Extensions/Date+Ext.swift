@@ -13,4 +13,9 @@ extension Date {
     var weekdayInt: Int {
         Calendar.current.component(.weekday, from: self)
     }
+    
+    // If a date is Monday, this var will return "Monday"
+    var weekdayTitle: String {
+        self.formatted(.dateTime.weekday(.wide))
+    }
 }

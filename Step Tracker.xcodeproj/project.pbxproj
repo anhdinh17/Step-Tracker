@@ -20,6 +20,7 @@
 		67E1ACEF2C3840D300C13168 /* ChartDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1ACEE2C3840D300C13168 /* ChartDataTypes.swift */; };
 		67E1ACF22C38426E00C13168 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1ACF12C38426E00C13168 /* Date+Ext.swift */; };
 		67E1ACF52C39073E00C13168 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 67E1ACF42C39073E00C13168 /* Algorithms */; };
+		67E1ACF72C3925AC00C13168 /* StepPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1ACF62C3925AC00C13168 /* StepPieChart.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		67E1ACEC2C38408200C13168 /* ChartMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMath.swift; sourceTree = "<group>"; };
 		67E1ACEE2C3840D300C13168 /* ChartDataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataTypes.swift; sourceTree = "<group>"; };
 		67E1ACF12C38426E00C13168 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		67E1ACF62C3925AC00C13168 /* StepPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepPieChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				67E1ACE62C37A99D00C13168 /* StepBarChart.swift */,
 				67E1ACEE2C3840D300C13168 /* ChartDataTypes.swift */,
 				67E1ACEC2C38408200C13168 /* ChartMath.swift */,
+				67E1ACF62C3925AC00C13168 /* StepPieChart.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				67E1ACED2C38408200C13168 /* ChartMath.swift in Sources */,
 				67C42D1F2C33F852002B3C1B /* HealthMetric.swift in Sources */,
 				67E1ACEF2C3840D300C13168 /* ChartDataTypes.swift in Sources */,
+				67E1ACF72C3925AC00C13168 /* StepPieChart.swift in Sources */,
 				67E1ACF22C38426E00C13168 /* Date+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

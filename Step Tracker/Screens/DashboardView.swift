@@ -53,24 +53,7 @@ struct DashboardView: View {
                     StepBarChart(selectedStat: selectedStat,
                                  chartData: hkManager.stepData)
                     
-                    VStack(alignment: .leading) {
-                        VStack(alignment: .leading) {
-                            Label("Averages", systemImage: "calendar")
-                                .font(.title3.bold())
-                                .foregroundStyle(.pink)
-                            
-                            Text("Last 28 days")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.bottom, 10)
-                        
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.secondary)
-                            .frame(height: 240)
-                    }
-                    .padding()
-                    .background (RoundedRectangle(cornerRadius: 10).fill(Color(.secondarySystemBackground)))
+                    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
                 }
             }
             .padding()
